@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+
+    <head lang="en">
+        <meta name="viewport" content="initial-scale-1, width=device-width">
+        <title>{{title}}</title>
+        <title>{% block title %} {% endblock %}</title>
+    </head>
+    <body>
+        {% include "nav.html"  %}
+        {% block body %}{% endblock %}
+        {% include "footer.html"  %}
+    </body>
+</html>
