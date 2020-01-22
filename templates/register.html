@@ -4,10 +4,10 @@
 {% block body %}
     <h1>Welcome to Student Registration Portal</h1>
     <form action="/register" method="POST">
-        <input autofocus type="text" name="firstname" autocomplete="off" placeholder="First Name">
-        <input type="text" name="lastname" autocomplete="off" placeholder="Last Name">
-        <input type="email" name="email" autocomplete="off" placeholder="Email">
-        <input type="password" minlength="8" name="password" autocomplete="off" placeholder="Password">
+        <input autofocus type="text" name="firstname" autocomplete="off" placeholder="First Name" required>
+        <input type="text" name="lastname" autocomplete="off" placeholder="Last Name" required>
+        <input type="email" name="email" autocomplete="off" placeholder="Email" required>
+        <input type="password" minlength="8" name="password" autocomplete="off" placeholder="Password" >
         <input type="submit" value="Register">
         <a href="/registrants">or see who else is registered</a>
     </form>

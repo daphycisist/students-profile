@@ -9,22 +9,35 @@
 <!--    </ol>-->
 
 
-<table>
+<table border="3">
     <thead>
         <td>ID</td>
         <td>Firstname</td>
         <td>Lastname</td>
     </thead>
     
-    {%for row in rows%}
+    {% for row in rows %}
 
     <tr>
+        <!-- You can use this format to access the data in the rows -->
+        <td>{{row["id"]}}</td>
+        <!-- or this -->
+        <td>{{row.lastname}}</td>
+        <!--  -->
+        <td>{{row["firstname"]}}</td>
+        <td>
+            <a href="{{url_for('delete', rid=row.id)}}">Delete</a><!-- delete on this line refers delete() view function  -->
+        </td>
+    </tr>
+
+    <!-- <tr>
         <td>{{row["id"]}}</td>
         <td>{{row["firstname"]}}</td>
         <td>{{row["lastname"]}}</td>
-    </tr>
+        <td><button type="button" name="edit">Edit</button></td>
+    </tr> -->
 
-    {%endfor%}
+    {% endfor %}
 </table>
 
 {% endblock %}

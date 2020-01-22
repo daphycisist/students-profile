@@ -3,21 +3,13 @@ import csv
 import sqlite3
 import os
 
-
-
 app = Flask(__name__)
-
+app.debug=True
 
 @app.route("/")
 def index():
     title = "Student Register"
     return render_template("index.html", title=title)
-
-
-@app.route("/register", methods=["GET"])
-def register():
-    return render_template("register.html")
-
 
 # students = []
 
@@ -26,17 +18,19 @@ def registration():
     msg="msg"
     if request.method == "POST":
         try:
-            firstname = request.form["firstname"]
+            #I can use this format to post to my database
+            firstname = request.form.get("firstname")
+            #or this
             lastname = request.form["lastname"]
             email = request.form["email"]
             password = request.form["password"]
-            # if not firstname or not lastname or not email or not password:
-            #     return render_template("register.html")
-
+            
             #working with databases
+          
+            
             with sqlite3.connect("students-profile.db") as con:
                 cur = con.cursor()
-                cur.execute("INSERT INTO students (id, firstname, lastname) VALUES (?,?)",(firstname, lastname))
+                cur.execute("INSERT INTO students (firstname, lastname) VALUES (?,?)",(firstname, lastname))
                 con.commit()
                 msg= "Record created successfully"
         except:
@@ -45,6 +39,8 @@ def registration():
         finally:
             return render_template("success.html", msg=msg)
             con.close()
+    else:
+        return render_template("register.html")
 
     
     # for working with .csv files
@@ -67,8 +63,8 @@ def registrants():
     con.row_factory = sqlite3.Row
     cur = con.cursor()
     cur.execute("SELECT * FROM students")
-    rows = cur.fetchall()    
-    
+    rows = cur.fetchall()
+        
     #working with csv files
     # with open("registered.csv", "r") as file:
     #     reader = csv.reader(file)
@@ -76,13 +72,17 @@ def registrants():
     return render_template("registered.html", rows=rows)
     # return render_template("registered.html", students=students)
 
-# @app.route("/register", methods=["POST"])
-# def registered():
-#     firstname = request.form.get("firstname")
-#     lastname = request.form.get("lastname")
-#     email = request.form.get("email")
-#     password = request.form.get("password")
-#     if not firstname or not lastname or not email or not password:
-#         return render_template("register.html")
-#     return render_template("success.html")
+@app.route("/<rid>/delete", methods=["POST", "GET"])
+def delete(rid):
+    if request.method == "POST":
+        con = sqlite3.connect("students-profile.db")
+        cur=con.cursor()
+        #for rid, a dangling comma is put after the rid to force a tuple. for better readability, we can employ the use of list literals [rid]
+        cur.execute("DELETE FROM students WHERE id=(?)", (rid,))
+        con.commit()
+        return redirect("/registrants")
+    else:
+        return render_template("del_confirm.html", rid=rid)
 
+if __name__ == "__main__":
+    app.run()
